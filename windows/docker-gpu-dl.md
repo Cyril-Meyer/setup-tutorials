@@ -5,6 +5,14 @@ I wanted to stay on windows 11 for proprietary driver reason, the computer is no
 
 The aim of the setup is to install a permanent Jupyterlab server which use the GPU.
 
+## Long story short
+
+* Install GPU drivers
+* Install WSL 2
+* Install docker desktop
+* `docker run -it --rm --runtime=nvidia tensorflow/tensorflow:2.16.1-gpu bash`
+* [optional: setup jupyterlab](#jupyterlab-server)
+
 ## Prerequisites
 
 * NVIDIA drivers
@@ -87,6 +95,8 @@ You can manage the installed images in docker desktop GUI.
 
 ![image](https://github.com/user-attachments/assets/ddc3dda9-6ecf-4ade-9e12-d801e8616727)
 
+Now we want a 
+
 More informations
 * [Cyril-Meyer/GPUBench-IMAGeS tensorflow benchmark results](https://github.com/Cyril-Meyer/GPUBench-IMAGeS/?tab=readme-ov-file#tensorflow)
 * [hub.docker tensorflow/tensorflow](https://hub.docker.com/r/tensorflow/tensorflow/)
@@ -97,6 +107,38 @@ Try jupyterlab
 * `docker run -it --rm -v .:/tf/notebooks -p 8888:8888 tensorflow/tensorflow:2.16.1-jupyter`
 
 This is the right moment to check if the server is also accessible from another computer (if you want to).
+
+<details>
+<summary>Dockerfile</summary>
+
+```dockerfile
+FROM tensorflow/tensorflow:2.16.1-gpu
+
+ARG USER_ID
+ARG GROUP_ID
+
+RUN groupadd -r -g $GROUP_ID cyril && useradd -r -u $USER_ID -g cyril -m -d /home/cyril cyril
+ENV SHELL=/bin/bash
+RUN mkdir -p /home/cyril/development && chown -R cyril:cyril /home/cyril/development
+WORKDIR /home/cyril/development
+
+RUN apt update
+RUN apt install git -y
+RUN pip install --upgrade pip
+RUN pip install jupyterlab==4.4.0
+
+CMD ["jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--allow-root"]
+```
+
+</details>
+
+* First start in WSL2
+  * `docker build --build-arg USER_ID=$(id -u) --build-arg GROUP_ID=$(id -g) -t jlab .`
+  * `docker run --runtime=nvidia -it --name jlab-container -v "$(pwd):/home/cyril/development" --user $(id -u):$(id -g) -p 8888:8888 jlab`
+
+After the first start, you can restart in docker desktop:
+
+![image](https://github.com/user-attachments/assets/4e566298-cb5f-46de-ab2f-c72d01059656)
 
 #### Some interesting references
 
