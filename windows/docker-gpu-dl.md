@@ -3,6 +3,8 @@
 The following setup has been made on a Aurora R16 with Windows 11 pro (10.0.26100) and and RTX 4090 (driver version 572.83).
 I wanted to stay on windows 11 for proprietary driver reason, the computer is not officially linux compatible.
 
+The aim of the setup is to install a permanent Jupyterlab server which use the GPU.
+
 ## Prerequisites
 
 * NVIDIA drivers
@@ -79,8 +81,24 @@ TF2-CNN-ResNet50 : 1.3719675064086914
 TF2-CNN-ResNet101 : 2.7556068897247314
 ```
 
+### Docker Desktop
+
+You can manage the installed images in docker desktop GUI.
+
+![image](https://github.com/user-attachments/assets/ddc3dda9-6ecf-4ade-9e12-d801e8616727)
+
 More informations
 * [Cyril-Meyer/GPUBench-IMAGeS tensorflow benchmark results](https://github.com/Cyril-Meyer/GPUBench-IMAGeS/?tab=readme-ov-file#tensorflow)
 * [hub.docker tensorflow/tensorflow](https://hub.docker.com/r/tensorflow/tensorflow/)
 
 ## JupyterLab server
+
+Try jupyterlab
+* `docker run -it --rm -v .:/tf/notebooks -p 8888:8888 tensorflow/tensorflow:2.16.1-jupyter`
+
+This is the right moment to check if the server is also accessible from another computer (if you want to).
+
+#### Some interesting references
+
+* https://www.pendragonai.com/setup-tensorflow-gpu-windows-docker-wsl2/
+* https://www.youtube.com/watch?v=YozfiLI1ogY
