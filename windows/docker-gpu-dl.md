@@ -140,6 +140,15 @@ After the first start, you can restart in docker desktop:
 
 ![image](https://github.com/user-attachments/assets/4e566298-cb5f-46de-ab2f-c72d01059656)
 
+## Mount readonly network drive (NAS)
+
+If you want to mount network drive (e.g. synology NAS folders)
+* WSL mount
+  * `sudo mkdir /mnt/j`
+  * `sudo mount -t drvfs J: /mnt/j`
+* Then add readonly bind
+  * `docker run --runtime=nvidia -it --name jlab-container -v "$(pwd):/home/cyril/development" -v "/mnt/j:/mnt/j:ro" --user $(id -u):$(id -g) -p 8888:8888 jlab`
+
 #### Some interesting references
 
 * https://www.pendragonai.com/setup-tensorflow-gpu-windows-docker-wsl2/
