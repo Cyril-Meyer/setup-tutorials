@@ -103,6 +103,8 @@ More informations
 
 ## JupyterLab server
 
+**WARNING: a running gpu docker jupyterlab instance will probably crash (gpu not available) fast after a few days if you use it. This is only to be used for quick tests.**
+
 Try jupyterlab
 * `docker run -it --rm -v .:/tf/notebooks -p 8888:8888 tensorflow/tensorflow:2.16.1-jupyter`
 
